@@ -79,14 +79,14 @@ export default class Canvas {
         this.rows,
       );
     }
+
+    ///FONCTION A UPDATE AU GUI -> appel meme fonction dans la render() pour eviter branching
     switch (this.params.preset) {
       case 1:
         this.applyPreset1(avg);
-        console.log("PRESET 1");
         break;
       case 2:
         this.applyPreset2(avg);
-        console.log("PRESET 2");
         break;
       default:
         console.log("no preset detected");
@@ -103,11 +103,10 @@ export default class Canvas {
     if (avg < 70) {
       this.canvas.style.filter = "invert(0)";
     }
-
-    if (avg > 10) {
+    if (avg > this.params.blendingThresholdDiff) {
       this.ctx.globalCompositeOperation = "difference";
     }
-    if (avg > 80) {
+    if (avg > this.params.blendingThresholdColorDodge) {
       this.ctx.globalCompositeOperation = "color-dodge";
       this.canvas.style.filter = "invert(1)";
     }
@@ -119,7 +118,7 @@ export default class Canvas {
       const r = Math.floor(Math.random() * (avg / rRatio));
 
       const gradient = this.ctxRT!.createLinearGradient(0, 0, 200, 0);
-      gradient.addColorStop(0, "green");
+      gradient.addColorStop(0, "purple");
       gradient.addColorStop(1, "white");
       this.ctxRT!.fillStyle = gradient;
 
@@ -130,7 +129,8 @@ export default class Canvas {
   }
 
   applyPreset2(avg: number) {
-    this.ctxRT!.globalCompositeOperation = "source-over";
+    this.canvas.style.filter = "invert(0)";
+    this.ctx.globalCompositeOperation = "source-over";
 
     this.lastAvg = avg;
     const gradient = this.ctxRT!.createLinearGradient(0, 0, 280, 0);
@@ -140,7 +140,7 @@ export default class Canvas {
     this.ctxRT!.strokeStyle = gradient;
 
     if (avg > this.lastAvg) {
-      this.ctxRT!.lineWidth *= 1.2;
+      this.ctxRT!.lineWidth *= 2;
     } else {
       this.ctxRT!.lineWidth *= 0.8;
     }
@@ -151,12 +151,17 @@ export default class Canvas {
     }
     this.ctxRT!.beginPath();
     this.ctxRT?.moveTo(this.lastPointerX, this.lastPointerY);
+    const nextX = Math.random() * this.canvas.width;
+    const nextY = Math.random() * this.canvas.height;
     this.ctxRT?.quadraticCurveTo(
-      Math.random() * this.canvas.width,
-      Math.random() * this.canvas.height,
       Math.random() * 30,
       Math.random() * 30,
+      nextX,
+      nextY,
     );
+
+    this.lastPointerX = nextX;
+    this.lastPointerY = nextY;
     this.ctxRT!.stroke();
   }
 

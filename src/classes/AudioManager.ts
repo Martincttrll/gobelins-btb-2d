@@ -32,7 +32,7 @@ export default class AudioManager {
     this.audioCtx = new AudioContext();
     const mediaSourceNode = this.audioCtx.createMediaElementSource(this.audio);
     this.analyser = this.audioCtx.createAnalyser();
-    this.analyser.fftSize = params.fftSize;
+    this.analyser.fftSize = 1024;
     this.analyserBuffer = new Uint8Array(this.analyser.frequencyBinCount);
 
     mediaSourceNode.connect(this.analyser);

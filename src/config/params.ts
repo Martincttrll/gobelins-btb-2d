@@ -1,13 +1,15 @@
 export type Params = {
   maxPixelSize: number;
-  fftSize: number;
   preset: number;
   applyPixelSizeUpdate: boolean;
+  blendingThresholdDiff: number;
+  blendingThresholdColorDodge: number;
 };
 
 export const params: Params = {
   maxPixelSize: 36,
-  fftSize: 1024,
   preset: 1,
   applyPixelSizeUpdate: true,
+  blendingThresholdDiff: 10,
+  blendingThresholdColorDodge: 80,
 };

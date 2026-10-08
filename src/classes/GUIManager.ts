@@ -4,6 +4,7 @@ import { params } from "../config/params";
 export class GUIManager {
   pane = new Pane();
   params = params;
+
   constructor() {
     this.createPane();
   }
@@ -14,27 +15,31 @@ export class GUIManager {
       min: 4,
       max: 128,
     });
-    this.pane.addBinding(this.params, "fftSize", {
-      options: {
-        "32": 32,
-        "64": 64,
-        "128": 128,
-        "256": 256,
-        "512": 512,
-        "1024": 1024,
-        "2048": 2048,
-        "4096": 4096,
-        "8192": 8192,
-        "16384": 16384,
-        "32768": 32768,
-      },
+    this.pane
+      .addBinding(this.params, "preset", {
+        options: {
+          "1": 1,
+          "2": 2,
+          "3": 3,
+        },
+      })
+      .on("change", (e) => {
+        console.log(e);
+      });
+
+    const folderP1 = this.pane.addFolder({
+      title: "Preset 1",
     });
-    this.pane.addBinding(this.params, "preset", {
-      options: {
-        "1": 1,
-        "2": 2,
-        "3": 3,
-      },
+
+    folderP1.addBinding(this.params, "blendingThresholdDiff", {
+      step: 1,
+      min: 1,
+      max: 100,
+    });
+    folderP1.addBinding(this.params, "blendingThresholdColorDodge", {
+      step: 1,
+      min: 1,
+      max: 100,
     });
     this.pane.addBinding(this.params, "applyPixelSizeUpdate");
   }
