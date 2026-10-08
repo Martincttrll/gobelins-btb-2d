@@ -1,6 +1,8 @@
-import Canvas from "./Canvas";
+import Canvas from "./CanvasManager";
+import { params } from "../config/params";
 
 export default class AudioManager {
+  params = params;
   //Audio
   audio = new Audio("/audio.mp3");
   audioCtx?: AudioContext;
@@ -28,7 +30,7 @@ export default class AudioManager {
     this.audioCtx = new AudioContext();
     const mediaSourceNode = this.audioCtx.createMediaElementSource(this.audio);
     this.analyser = this.audioCtx.createAnalyser();
-    this.analyser.fftSize = 1024;
+    this.analyser.fftSize = params.fftSize;
     this.analyserBuffer = new Uint8Array(this.analyser.frequencyBinCount);
 
     mediaSourceNode.connect(this.analyser);

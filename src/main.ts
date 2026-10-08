@@ -1,6 +1,6 @@
 import { GUIManager } from "./classes/GUIManager";
 import AudioManager from "./classes/AudioManager";
-import Canvas from "./classes/Canvas";
+import Canvas from "./classes/CanvasManager";
 
 class App {
   video?: HTMLVideoElement;
@@ -26,7 +26,7 @@ class App {
 
     this.audioManager = new AudioManager();
     this.canvasManager = new Canvas();
-    this.GUIManager = new GUIManager(this.canvasManager.params);
+    this.GUIManager = new GUIManager();
 
     this.audioManager.canvasManager = this.canvasManager;
 
@@ -94,22 +94,6 @@ class App {
       this.tick();
     });
   }
-
-  // play() {
-  //   if (!playing) {
-  //     time = Date.now();
-  //     tick();
-  //     audio.play();
-  //     console.log("play");
-  //   }
-  // }
-
-  // pause() {
-  //   if (playing) {
-  //     audio.pause();
-  //     console.log("pause");
-  //   }
-  // }
 }
 
 new App();

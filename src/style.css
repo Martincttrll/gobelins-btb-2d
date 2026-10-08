@@ -1,3 +1,26 @@
 * {
   margin: 0;
 }
+
+.home__layout {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  text-align: center;
+  gap: 10rem;
+  align-items: center;
+}
+
+h1 {
+  margin-top: 10rem;
+}
+
+button {
+  text-align: center;
+}
