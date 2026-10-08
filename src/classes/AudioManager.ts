@@ -20,7 +20,9 @@ export default class AudioManager {
   render() {
     this.analyserBuffer &&
       this.analyser &&
-      this.analyser.getByteFrequencyData(this.analyserBuffer);
+      this.analyser.getByteFrequencyData(
+        this.analyserBuffer as Uint8Array<ArrayBuffer>,
+      );
 
     if (this.canvasManager)
       this.canvasManager.analyserBuffer = this.analyserBuffer;
