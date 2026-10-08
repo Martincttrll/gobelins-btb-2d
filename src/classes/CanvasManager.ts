@@ -170,11 +170,4 @@ export default class Canvas {
     this.camRT.width = this.cols;
     this.camRT.height = this.rows;
   }
-
-  updatePixelSize(canvas: HTMLCanvasElement) {
-    this.cols = Math.floor(window.innerWidth / this.pixelSize);
-    this.rows = Math.floor(window.innerHeight / this.pixelSize);
-    canvas.width = this.cols;
-    canvas.height = this.rows;
-  }
 }
