@@ -17,6 +17,10 @@ export default class Canvas {
 
   pixelSize = 1;
 
+  lastAvg?: number;
+  lastPointerX?: number;
+  lastPointerY?: number;
+
   constructor() {
     document.querySelector("body")!.appendChild(this.camRT);
   }
@@ -31,8 +35,9 @@ export default class Canvas {
 
     //Pixel size
     const avg = sum / this.analyserBuffer.length;
-    this.pixelSize = mapRange(avg, 0, 255, 1, this.params.maxPixelSize);
-    console.log(this.pixelSize);
+    this.params.applyPixelSizeUpdate
+      ? (this.pixelSize = mapRange(avg, 0, 255, 1, this.params.maxPixelSize))
+      : (this.pixelSize = 1);
     // this.pixelSize = 1;
 
     const size = Math.max(1, Math.round(this.pixelSize));
@@ -74,9 +79,26 @@ export default class Canvas {
         this.rows,
       );
     }
+    switch (this.params.preset) {
+      case 1:
+        this.applyPreset1(avg);
+        console.log("PRESET 1");
+        break;
+      case 2:
+        this.applyPreset2(avg);
+        console.log("PRESET 2");
+        break;
+      default:
+        console.log("no preset detected");
+    }
 
+    this.ctx.imageSmoothingEnabled = false;
+    this.ctx.drawImage(this.camRT, 0, 0, window.innerWidth, window.innerHeight);
+  }
+
+  applyPreset1(avg: number) {
     if (avg < 30) {
-      this.ctxRT.globalCompositeOperation = "source-over";
+      this.ctxRT!.globalCompositeOperation = "source-over";
     }
     if (avg < 70) {
       this.canvas.style.filter = "invert(0)";
@@ -91,22 +113,51 @@ export default class Canvas {
     }
 
     if (avg > 40) {
-      const x = Math.floor(Math.random() * this.cols);
-      const y = Math.floor(Math.random() * this.rows);
-      const r = Math.floor(Math.random() * (avg / 5));
+      const rRatio = this.params.applyPixelSizeUpdate ? 5 : 0.8;
+      const x = Math.floor(Math.random() * this.cols!);
+      const y = Math.floor(Math.random() * this.rows!);
+      const r = Math.floor(Math.random() * (avg / rRatio));
 
-      var gradient = this.ctxRT.createLinearGradient(0, 0, 200, 0);
+      const gradient = this.ctxRT!.createLinearGradient(0, 0, 200, 0);
       gradient.addColorStop(0, "green");
       gradient.addColorStop(1, "white");
-      this.ctxRT.fillStyle = gradient;
+      this.ctxRT!.fillStyle = gradient;
 
-      this.ctxRT.beginPath();
-      this.ctxRT.arc(x, y, r, 0, Math.PI * 2);
-      this.ctxRT.fill();
+      this.ctxRT!.beginPath();
+      this.ctxRT!.arc(x, y, r, 0, Math.PI * 2);
+      this.ctxRT!.fill();
+    }
+  }
+
+  applyPreset2(avg: number) {
+    this.ctxRT!.globalCompositeOperation = "source-over";
+
+    this.lastAvg = avg;
+    const gradient = this.ctxRT!.createLinearGradient(0, 0, 280, 0);
+    gradient.addColorStop(0, "lightblue");
+    gradient.addColorStop(0.5, "purple");
+    gradient.addColorStop(1, "darkblue");
+    this.ctxRT!.strokeStyle = gradient;
+
+    if (avg > this.lastAvg) {
+      this.ctxRT!.lineWidth *= 1.2;
+    } else {
+      this.ctxRT!.lineWidth *= 0.8;
     }
 
-    this.ctx.imageSmoothingEnabled = false;
-    this.ctx.drawImage(this.camRT, 0, 0, window.innerWidth, window.innerHeight);
+    if (!this.lastPointerX || !this.lastPointerY) {
+      this.lastPointerX = this.canvas.width / 2;
+      this.lastPointerY = this.canvas.height / 2;
+    }
+    this.ctxRT!.beginPath();
+    this.ctxRT?.moveTo(this.lastPointerX, this.lastPointerY);
+    this.ctxRT?.quadraticCurveTo(
+      Math.random() * this.canvas.width,
+      Math.random() * this.canvas.height,
+      Math.random() * 30,
+      Math.random() * 30,
+    );
+    this.ctxRT!.stroke();
   }
 
   onResize() {

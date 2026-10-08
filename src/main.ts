@@ -74,6 +74,8 @@ class App {
   onClick() {
     if (!this.frameRequest) {
       this.tick();
+      const layout = document.querySelector(".home__layout") as HTMLElement;
+      layout!.style.display = "none";
     }
     this.audioManager?.onClick();
   }

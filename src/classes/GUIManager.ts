@@ -29,5 +29,13 @@ export class GUIManager {
         "32768": 32768,
       },
     });
+    this.pane.addBinding(this.params, "preset", {
+      options: {
+        "1": 1,
+        "2": 2,
+        "3": 3,
+      },
+    });
+    this.pane.addBinding(this.params, "applyPixelSizeUpdate");
   }
 }
