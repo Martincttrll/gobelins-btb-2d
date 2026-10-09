@@ -20,7 +20,6 @@ export class GUIManager {
         options: {
           "1": 1,
           "2": 2,
-          "3": 3,
         },
       })
       .on("change", (e) => {
@@ -42,5 +41,10 @@ export class GUIManager {
       max: 100,
     });
     this.pane.addBinding(this.params, "applyPixelSizeUpdate");
+
+    const folderP2 = this.pane.addFolder({
+      title: "Preset 2",
+    });
+    folderP2.addBinding(this.params, "randomizePixelColor");
   }
 }

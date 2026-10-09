@@ -4,6 +4,7 @@ export type Params = {
   applyPixelSizeUpdate: boolean;
   blendingThresholdDiff: number;
   blendingThresholdColorDodge: number;
+  randomizePixelColor: boolean;
 };
 
 export const params: Params = {
@@ -12,4 +13,5 @@ export const params: Params = {
   applyPixelSizeUpdate: true,
   blendingThresholdDiff: 10,
   blendingThresholdColorDodge: 80,
+  randomizePixelColor: false,
 };

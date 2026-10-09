@@ -86,6 +86,11 @@ class App {
     this.time = currentTime;
     this.elapsed += this.delta;
 
+    if (this.canvasManager) {
+      this.canvasManager.delta = this.delta;
+      this.canvasManager.elapsed = this.elapsed;
+    }
+
     this.audioManager?.render();
     this.canvasManager?.render();
   }
